@@ -8,7 +8,7 @@ const InfoBox = ({ text, link, btnText }) => (
         <p className="font-medium sm:text-xl text-center">{text}</p>
         <Link className="neo-brutalism-white neo-btn" href={link}>
             {btnText}
-            <Image className="w-4 h-4 object-contain " src={arrow} height={100} width={100} alt='Next Image'/>
+            <Image className="w-4 h-4 object-contain " src='/arrow.svg' height={100} width={100} alt='Next Image'/>
 
         </Link>
     </div>
