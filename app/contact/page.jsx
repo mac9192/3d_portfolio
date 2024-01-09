@@ -6,6 +6,8 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
 import Fox from '../../models/Fox';
 import Loader from '../../components/Loader'
+import useAlert from '../../folder/useAlert';
+import Alert from '../../components/Alert'
 
 const Contact = () => {
 
@@ -14,8 +16,8 @@ const Contact = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [currentAnimation, setCurrentAnimation] = useState('idle')
 
+    const { alert, showAlert, hideAlert} = useAlert()
 
- 
     const handleChange = (e) => {
         setForm( { ...form, [e.target.name]: e.target.value})
     };
@@ -39,7 +41,11 @@ const Contact = () => {
             process.env.NEXT_PUBLIC_EMAIL_JS_PUBLIC_KEY,
         ).then(() => {
             setIsLoading(false)
+
+            showAlert( { show:true, text: 'Message sent successfully!', type: 'success' })
+
             setTimeout(() => {
+                hideAlert()
                 setCurrentAnimation('idle')
                 setForm({ name: '', email: '', message: ''})
             }, [3000])
@@ -47,6 +53,7 @@ const Contact = () => {
             setIsLoading(false);
             setCurrentAnimation('idle')
             console.log(error)
+            showAlert( { show:true, text: 'Message sent successfully!', type: 'success' })
         })
     }
   
@@ -64,6 +71,8 @@ const Contact = () => {
     return (
 
         <section className="relative flex lg:flex-row flex-col max-container">
+            {alert.show && <Alert {...alert} />}
+ 
             <div className="flex-1 min-w-[50%] flex flex-col">
                 <h1 className="head-text">Get in Touch</h1>
                 <form className="w-full flex flex-col gap-7 mt-14"
