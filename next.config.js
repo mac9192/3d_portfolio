@@ -33,7 +33,7 @@ module.exports = {
       ],
     });
 
-    // Rest of your webpack configuration
+    // Rest of your webpack configurationss
 
     return config;
   },
