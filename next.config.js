@@ -5,7 +5,6 @@ module.exports = {
     // Add GLB loader for both server and client builds
     config.module.rules.push({
       test: /\.(glb|gltf)$/,
-      
       use: {
         loader: 'file-loader',
         options: {
@@ -33,6 +32,8 @@ module.exports = {
         },
       ],
     });
+
+    // Rest of your webpack configuration
 
     return config;
   },
