@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
@@ -9,12 +9,33 @@ import Island from '../models/Island';
 import Sky from '../models/Sky';
 import Bird from '../models/Bird';
 import Plane from '../models/Plane';
+import sakura from '../music/sakura.mp3'
+import { soundoff, soundon } from '../assets-3d/icons'
 
 export default function Home() {
+  const audioRef = useRef(null);
   const [isRotating, setIsRotating] = useState(false);
   const [currentStage, setCurrentStage] = useState(1);
   const [planeScale, setPlaneScale] = useState([3, 3, 3]);
   const [islandScale, setIslandScale] = useState([1, 1, 1]);
+  const [isPlayingMusic, setIsPlayingMusic] = useState(false)
+
+  useEffect(() => {
+    // Check if the code is running in the client environment
+    if (typeof window !== 'undefined') {
+      audioRef.current = new Audio(sakura);
+      audioRef.current.volume = 0.4;
+      audioRef.current.loop = true;
+
+      if (isPlayingMusic) {
+        audioRef.current.play();
+      }
+
+      return () => {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlayingMusic]);
 
   useEffect(() => {
     const adjustSizes = () => {
@@ -66,12 +87,20 @@ export default function Home() {
           />
           <Plane
             isRotating={isRotating}
-            planeScale={planeScale}
-            planePosition={[0, -4, -4]}
+            scale={planeScale}
+            position={[0, -4, -4]}
             rotation={[0, 20, 0]}
           />
         </Suspense>
       </Canvas>
+      <div className='absolute bottom-2 left-2'>
+        <Image
+          src={!isPlayingMusic ? soundoff : soundon}
+          alt='jukebox'
+          onClick={() => setIsPlayingMusic(!isPlayingMusic)}
+          className='w-10 h-10 cursor-pointer object-contain'
+        />
+      </div>
     </section>
   );
 }
